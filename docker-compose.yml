@@ -1,0 +1,16 @@
+version: '3.3'
+
+services:
+  webserver:
+    build: ./build
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    volumes:
+      - ./config/config.yml:/config/config.yml:ro
+      - ./sites:/sites:ro
+      - ./logs:/logs:rw
+      - ./logs:/var/log/nginx:rw
+      - ./letsencrypt/etc:/etc/letsencrypt:ro
+

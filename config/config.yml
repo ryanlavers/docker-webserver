@@ -1,0 +1,14 @@
+# ---
+# domain: example.com
+# ssl: true
+# redirect-www: true
+# locations:
+#   "/":
+#     proxy-to-container: app_api
+#   "/ws":
+#     proxy-to-container: app_api
+#     websocket: true
+# additional-config: |
+#   location /foo/bar {
+#     root /var/www;
+#   }
