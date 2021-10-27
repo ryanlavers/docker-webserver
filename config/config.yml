@@ -4,9 +4,9 @@
 # redirect-www: true
 # locations:
 #   "/":
-#     proxy-to-container: app_api
+#     proxy-to: http://app_api:8080
 #   "/ws":
-#     proxy-to-container: app_api
+#     proxy-to: http://app_api:8080
 #     websocket: true
 # additional-config: |
 #   location /foo/bar {

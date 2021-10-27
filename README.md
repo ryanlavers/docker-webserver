@@ -5,7 +5,7 @@
 - Quick and easy configuration via a YAML file
 - Management of Let's Encrypt SSL certificates
 - Individual webroots and log files per domain
-- Proxy requests to a webapp in a local docker container
+- Proxy requests to another host, such as a webapp in a local docker container
 
 ## Setup
 
@@ -53,7 +53,7 @@ The `config/config.yml` file contains settings for each desired domain, separate
 | domain   | string      | The domain name to use. Can be a sub-domain. |
 | ssl      | boolean     | If set to true, site will be available via https; http requests will be automatically redirected (HTTP 301) to https. **Requires that the SSL certificate has already been generated** or server will not start. |
 | redirect-www | boolean | If set to true, requests to `www.[domain]` will be automatically redirected (HTTP 301) to the bare domain. If you use SSL, make sure your certificate includes both the bare domain as well as the www subdomain, or requests to www will throw security errors. |
-| locations | mapping    | Allows specifying configuration for individual sub-paths. Currently only `proxy-to-container` is supported here; see Proxying section below. |
+| locations | mapping    | Allows specifying configuration for individual sub-paths. Currently only `proxy-to` and `ws` are supported here; see Proxying section below. |
 | additional-config | string | The contents of this property will be included as-is in this domain's `server` block in the nginx config file, to allow any other configuration you want to specify. |
 
 ## Logging
@@ -66,15 +66,15 @@ Log rotation is not currently implemented; you can set that up yourself, but not
 
 ## Proxying
 
-Individual paths under a domain can be configured to proxy to a local docker container:
+Individual paths under a domain can be configured to proxy to another server:
 
 ```yaml
 domain: example.com
 locations:
   "/api":
-    proxy-to-container: api-server
+    proxy-to: http://api-server:8080
 ```
 
-In this example, any request to `example.com/api/*` will be proxied to the docker container named `api-server`. In order for this to work, the specified container must be on the same docker network as this web server (see [here](https://docs.docker.com/engine/reference/commandline/network_connect/) for more information on how to set this up).
+In this example, any request to `example.com/api/*` will be proxied to the host named `api-server` on port 8080.
 
 If you also include `websocket: true` under the location, it will add additional configuration to make sure proxying websocket requests works properly. 
